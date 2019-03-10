@@ -1,0 +1,21 @@
+version: '2'
+services:
+    web:
+        build: .
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www/html
+            - ./docker/apache/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
+            - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+        links:
+            - db
+    db:
+        image: mysql
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_DATABASE=trimania
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=root
+            - MYSQL_ROOT_PASSWORD=root
