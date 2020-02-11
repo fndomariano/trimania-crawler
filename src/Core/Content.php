@@ -4,7 +4,9 @@ namespace Trimania\Core;
 
 class Content
 {
-    private $ch;
+	const BASE_URL = 'https://www.trimania.com.br';
+	
+	const CODE_SQUARE_NORTH = 1;
 
     private $drawDate = '';
 
@@ -20,12 +22,12 @@ class Content
 
     private function getCookies() 
     {   
-        $url = $this->getBaseUrl()."/funcoes/ajax/seleciona_praca.php";
+        $url = self::BASE_URL . '/funcoes/ajax/seleciona_praca.php';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, array('CdPraca'=>1));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, ['CdPraca' => self::CODE_SQUARE_NORTH]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
         curl_close($ch);
@@ -35,10 +37,12 @@ class Content
 
     private function curlSetLoterry()
     {
-        $url = $this->getBaseUrl()."/principal.php";
-        
-        if ($this->drawDate != '') {
-            $url = $this->getBaseUrl()."/principal.php?DtSorteio={$this->drawDate}";
+        $url = self::BASE_URL . '/principal.php';
+		
+		$drawDate = $this->drawDate;
+		
+        if ($drawDate != '') {
+            $url = self::BASE_URL . '/principal.php?DtSorteio=' . $drawDate;
         }
         
         $cookies = $this->getCookies();
@@ -49,10 +53,5 @@ class Content
         $response = curl_exec($ch);
         curl_close($ch);
         return $response;
-    }
-
-    private function getBaseUrl()
-    {
-        return 'http://trimania.jelasticlw.com.br';
     }
 }

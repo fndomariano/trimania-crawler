@@ -7,6 +7,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Trimania\Core\Content;
+use Trimania\Core\Crawler;
+
+
 class ImportCommand extends Command
 {
     protected function configure()
@@ -22,7 +26,15 @@ class ImportCommand extends Command
 
         if (!$drawDate) {
             throw new \Exception('The option --draw_date is required.');
-        }
+		}
+						
+		$content = new Content($drawDate);
+		$html = $content->getHtml();
+		
+		$crawler = new Crawler($html);
 
+		var_dump($crawler->getNumbers());
+		var_dump($crawler->getLocations());
+		
     }
 }
