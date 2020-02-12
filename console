@@ -1,12 +1,24 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
+use Trimania\Command\ImportCommand;
+use Trimania\Command\ExportCommand;
+use Trimania\Core\Database;
+use Trimania\Core\QueryBuilder;
 
 
-$app = new Application();
-$app->add(new Trimania\Command\ImportCommand());
+$dotenv = new Dotenv\Dotenv(__DIR__, '.env');
+$dotenv->load();
 
-$app->run();
+$config = require __DIR__ . '/config/database.php';
+$database = new Database($config);
+$queryBuilder = new QueryBuilder($database);
+
+$application = new Application();
+$application->add(new ImportCommand($queryBuilder));
+$application->add(new ExportCommand($queryBuilder));
+
+$application->run();

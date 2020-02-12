@@ -59,7 +59,7 @@ To import or export data is necessary a __sweepstakes date__. Without this infor
 
 To import data you need to run a command like below.
 ```bash
-docker-compose exec web php web/index.php trimania:import --draw_date=2020-02-02
+docker-compose exec web php console trimania:import --draw_date=2020-02-02
 ```
 After the importation is showed the numbers and locations that were getting.
 
@@ -70,8 +70,8 @@ After the importation is showed the numbers and locations that were getting.
 To export data you need to run a command like below.
 
 ```bash
-docker-compose exec web php web/index.php trimania:export --draw_year=2020  --type=numbers
-docker-compose exec web php web/index.php trimania:export --draw_year=2020  --type=locations
+docker-compose exec web php console trimania:export --draw_year=2020  --type=numbers
+docker-compose exec web php console trimania:export --draw_year=2020  --type=locations
 ```
 
 The files will be gererated in `data_csv` directory.
