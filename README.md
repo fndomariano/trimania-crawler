@@ -20,13 +20,25 @@ b) Configure environment file
 $ cp .env.default .env
 ```
 
-c) You can use docker (I recommend)
+c) Configure environment file
+
+```bash
+$ cp .env.default .env
+```
+
+d) Create a directory called `data_csv`
+
+```bash
+$ mkdir data_csv
+```
+
+e) You can use docker (I recommend)
 
 ```bash
 $ docker-compose up -d
 ```
 
-d) Import database
+e) Import database
 
 I like using the command line for that. Of course, you can to import the way you prefer. I let some databases in the *data directory*. 
 
@@ -51,9 +63,9 @@ To import or export data is necessary a __sweepstakes date__. Without this infor
 
 ### Importing
 
-To import data you need to access an URL like below.
-```
-http://localhost/import.php?date=2019-03-10
+To import data you need to run an command like below.
+```bash
+docker-compose exec web php web/index.php trimania:import --draw_date=2020-02-02
 ```
 After the importation is showed the numbers and locations that were getting.
 
@@ -61,16 +73,11 @@ After the importation is showed the numbers and locations that were getting.
 
 ### Exporting
 
-To export data, I created a service that makes the task. I build my filter and I inform the filename on PHP to make the download of CSV file.
+To export data you need to run an command like below.
 
-```php
-$data = $queryBuilder
-	->table('numbers')
-	->columns(['draw_date', 'numbers_drawn'])
-	->where(['YEAR(draw_date) = 2018'])
-	->select();
-
-$export = new ExportData($data, 'trimaniaNumbers', ';');
-
-$export->download(); 
+```bash
+docker-compose exec web php web/index.php trimania:export --draw_year=2020  --type=numbers
+docker-compose exec web php web/index.php trimania:export --draw_year=2020  --type=locations
 ```
+
+The files will be gererated in `data_csv` directory.

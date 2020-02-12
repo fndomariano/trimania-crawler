@@ -17,9 +17,9 @@ class ExportData
         $this->fileName = $fileName;
     }
 
-    private function generate()
+    public function generate()
     {
-        $file = fopen('php://output', 'w');
+        $file = fopen( __DIR__ . '/../../data_csv/' . $this->fileName, 'w');
 
         fputcsv($file, array_keys($this->data[0]), $this->delimiter);
         foreach ($this->data as $line) {
@@ -27,12 +27,5 @@ class ExportData
         }
 
         fclose($file);
-    }
-
-    public function download()
-    {
-        header('Content-Type: application/csv');
-        header("Content-Disposition: attachment; filename={$this->fileName}.csv;");
-        $this->generate();
-    }
+    }    
 }

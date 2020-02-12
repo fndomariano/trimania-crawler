@@ -4,6 +4,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 use Trimania\Command\ImportCommand;
+use Trimania\Command\ExportCommand;
 use Trimania\Core\Database;
 use Trimania\Core\QueryBuilder;
 
@@ -17,5 +18,6 @@ $queryBuilder = new QueryBuilder($database);
 
 $application = new Application();
 $application->add(new ImportCommand($queryBuilder));
+$application->add(new ExportCommand($queryBuilder));
 
 $application->run();
