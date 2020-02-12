@@ -25,26 +25,24 @@ class ExportCommand extends Command
         $this->setName('trimania:export')
 			->setDescription('Export sweepstake.')
 			->setHelp('Options: locations | numbers')
-            ->addOption('draw_year', null, InputOption::VALUE_REQUIRED)
+            ->addOption('date_begin', null, InputOption::VALUE_REQUIRED)
+            ->addOption('date_until', null, InputOption::VALUE_REQUIRED)
             ->addOption('type', null, InputOption::VALUE_REQUIRED);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $drawYear = $input->getOption('draw_year');
+        $dateBegin = $input->getOption('date_begin');
+        $dateUntil = $input->getOption('date_until');
         $type = $input->getOption('type');
 
 		try	{
-			
-			if (!$drawYear) {
-				throw new \Exception('The option --draw_year is required.');
-			}
-	
+						
 			if ($type != 'numbers' && $type != 'locations') {
 				throw new \Exception('The option --type is invalid.');
 			}
 			
-			$data = $this->getData($drawYear, $type);
+			$data = $this->getData($dateBegin, $dateUntil, $type);
 	
 			if (empty($data)) {
 				throw new Exception('There is no data for this year');
@@ -62,20 +60,39 @@ class ExportCommand extends Command
     		
 	}
 
-	private function getData($year, $type)
-	{
+	private function getData($dateBegin, $dateUntil, $type)
+	{		
+		$filters = [];
+
+
 		$columns = ['draw_date', 'numbers_drawn'];
 
-		if ($type == 'location') {
+		if ($type == 'locations') {
 			$columns = ['draw_date', 'city_district'];
 		}
 
-		$data = $this->queryBuilder
-			->table('numbers')
-			->columns($columns)
-			->where(["YEAR(draw_date) = {$year}"])
-			->select();
+		if ($dateBegin != '' && $dateUntil == '') {
+			$filters[] = "draw_date >= '{$dateBegin}'";
+		}
 
+		if ($dateBegin == '' && $dateUntil != '') {
+			$filters[] = "draw_date <= '{$dateUntil}'";
+		}
+
+		if ($dateBegin != '' && $dateUntil != '') {
+			$filters[] = "draw_date BETWEEN '{$dateBegin}' AND '{$dateUntil}'";
+		}
+		
+		$query = $this->queryBuilder
+			->table($type)
+			->columns($columns);
+		
+		if (!empty($filters)) {
+			$query->where($filters);
+		}
+		
+		$data = $query->select();
+		
 		return $data;	
 	}
 
