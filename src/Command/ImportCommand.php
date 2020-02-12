@@ -13,6 +13,15 @@ use Trimania\Core\Crawler;
 
 class ImportCommand extends Command
 {
+	private $queryBuilder;
+
+	public function __construct($queryBuilder)
+	{
+		$this->queryBuilder = $queryBuilder;
+
+		parent::__construct();
+	}
+
     protected function configure()
     {
         $this->setName('trimania:import')
@@ -29,12 +38,39 @@ class ImportCommand extends Command
 		}
 						
 		$content = new Content($drawDate);
-		$html = $content->getHtml();
-		
+		$html = $content->getHtml();		
 		$crawler = new Crawler($html);
 
-		var_dump($crawler->getNumbers());
-		var_dump($crawler->getLocations());
+
+		$output->writeln('<comment>Saving numbers</comment>');
+		$this->saveNumbers($crawler->getNumbers(), $drawDate, $output);
 		
-    }
+		$output->writeln('<comment>Saving locations</comment>');
+		$this->saveLocations($crawler->getLocations(), $drawDate, $output);
+		
+	}
+
+	private function saveNumbers($numbers, $date, OutputInterface $output)
+	{
+		foreach ($numbers as $number) {
+			$output->writeln("<info>{$number}</info>");
+			$this->queryBuilder
+				->table('numbers')
+				->columns(['draw_date', 'numbers_drawn'])
+				->values([$date, $number])
+				->insert();			
+		}	
+	}
+
+	private function saveLocations($locations, $date, OutputInterface $output)
+	{
+		foreach ($locations as $location) {
+			$output->writeln("<info>{$location}</info>");
+			$this->queryBuilder
+				->table('locations')
+				->columns(['draw_date, city_district'])
+				->values([$date, $location])
+				->insert();				
+		}
+	}
 }
