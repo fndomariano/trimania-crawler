@@ -2,6 +2,7 @@
 
 namespace Trimania\Command;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -32,22 +33,33 @@ class ImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $drawDate = $input->getOption('draw_date');
-
-        if (!$drawDate) {
-            throw new \Exception('The option --draw_date is required.');
-		}
-						
-		$content = new Content($drawDate);
-		$html = $content->getHtml();		
-		$crawler = new Crawler($html);
-
-
-		$output->writeln('<comment>Saving numbers</comment>');
-		$this->saveNumbers($crawler->getNumbers(), $drawDate, $output);
 		
-		$output->writeln('<comment>Saving locations</comment>');
-		$this->saveLocations($crawler->getLocations(), $drawDate, $output);
-		
+		try {
+
+			if (!$drawDate) {
+				throw new \Exception('The option --draw_date is required.');
+			}
+
+			if ($this->isThereDataAlready($drawDate)) {
+				throw new \Exception('Already exists data on this date.');
+			}
+							
+			$content = new Content($drawDate);
+			$html = $content->getHtml();		
+			$crawler = new Crawler($html);
+
+			$numbers = $crawler->getNumbers();
+			$locations = $crawler->getLocations();
+			
+			$output->writeln('<comment>Saving numbers</comment>');
+			$this->saveNumbers($numbers, $drawDate, $output);
+			
+			$output->writeln('<comment>Saving locations</comment>');
+			$this->saveLocations($locations, $drawDate, $output);
+
+		} catch (Exception $e) {
+			$output->writeln("<error>{$e->getMessage()}</error>");
+		}		
 	}
 
 	private function saveNumbers($numbers, $date, OutputInterface $output)
@@ -72,5 +84,26 @@ class ImportCommand extends Command
 				->values([$date, $location])
 				->insert();				
 		}
+	}
+
+	private function isThereDataAlready($drawDate)
+	{
+		$numbers = $this->queryBuilder
+			->table('numbers')
+			->columns(['COUNT(*) AS total'])
+			->where(["draw_date = '{$drawDate}'"])
+			->select();
+		
+		$locations = $this->queryBuilder
+			->table('locations')
+			->columns(['COUNT(*) AS total'])
+			->where(["draw_date = '{$drawDate}'"])
+			->select();
+				
+		if ((int) $numbers[0]['total'] > 0 || (int) $locations[0]['total'] > 0) {
+			return true;
+		}
+
+		return false;
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace Trimania\Command;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,19 +34,30 @@ class ExportCommand extends Command
         $drawYear = $input->getOption('draw_year');
         $type = $input->getOption('type');
 
-        if (!$drawYear) {
-            throw new \Exception('The option --draw_year is required.');
-		}
+		try	{
+			
+			if (!$drawYear) {
+				throw new \Exception('The option --draw_year is required.');
+			}
+	
+			if ($type != 'numbers' && $type != 'locations') {
+				throw new \Exception('The option --type is invalid.');
+			}
+			
+			$data = $this->getData($drawYear, $type);
+	
+			if (empty($data)) {
+				throw new Exception('There is no data for this year');
+			}
 
-		if ($type != 'numbers' && $type != 'locations') {
-            throw new \Exception('The option --type is invalid.');
-		}
-								
-		$data = $this->getData($drawYear, $type);
+			$filename = $type . '-' . date('dmYHis');
+			$export = new ExportData($data, $filename, ';');
+			$export->generate();
 
-		$filename = $type . '-' . date('dmYHis');
-		$export = new ExportData($data, $filename, ';');
-		$export->generate();
+		} catch (Exception $e) {
+			$output->writeln("<error>{$e->getMessage()}</error>");
+		}
+    		
 	}
 
 	private function getData($year, $type)
