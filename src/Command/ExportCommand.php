@@ -41,6 +41,14 @@ class ExportCommand extends Command
 			if ($type != 'numbers' && $type != 'locations') {
 				throw new \Exception('The option --type is invalid.');
 			}
+
+			if ($dateBegin != '' && !$this->validateDate($dateBegin)) {
+				throw new Exception('The option --date_begin is invalid');
+			}
+
+			if ($dateUntil != '' && !$this->validateDate($dateUntil)) {
+				throw new Exception('The option --date_begin is invalid');
+			}
 			
 			$data = $this->getData($dateBegin, $dateUntil, $type);
 	
@@ -94,6 +102,12 @@ class ExportCommand extends Command
 		$data = $query->select();
 		
 		return $data;	
+	}
+
+	private function validateDate($drawDate, $format = 'Y-m-d')
+	{
+		$date = \DateTime::createFromFormat($format, $drawDate);		
+		return $date && $date->format($format) === $drawDate;
 	}
 
 }

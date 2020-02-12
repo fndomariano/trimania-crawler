@@ -70,8 +70,8 @@ After the importation is showed the numbers and locations that were getting.
 To export data you need to run a command like below.
 
 ```bash
-docker-compose exec web php console trimania:export --draw_year=2020  --type=numbers
-docker-compose exec web php console trimania:export --draw_year=2020  --type=locations
+docker-compose exec web php console trimania:export --date_begin=2020-01-01 --date_until=2020-01-31  --type=numbers
+docker-compose exec web php console trimania:export --date_begin=2020-01-01 --date_until=2020-01-31  --type=locations
 ```
 
 The files will be gererated in `data_csv` directory.
