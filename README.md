@@ -20,19 +20,13 @@ b) Configure environment file
 $ cp .env.default .env
 ```
 
-c) Configure environment file
-
-```bash
-$ cp .env.default .env
-```
-
-d) Create a directory called `data_csv`
+c) Create a directory called `data_csv`
 
 ```bash
 $ mkdir data_csv
 ```
 
-e) You can use docker (I recommend)
+d) You can use docker (I recommend)
 
 ```bash
 $ docker-compose up -d

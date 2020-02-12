@@ -54,6 +54,8 @@ class ExportCommand extends Command
 			$export = new ExportData($data, $filename, ';');
 			$export->generate();
 
+			$output->writeln("<info>The file {$filename}.csv was generated.</info>");
+
 		} catch (Exception $e) {
 			$output->writeln("<error>{$e->getMessage()}</error>");
 		}
