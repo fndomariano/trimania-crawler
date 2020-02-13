@@ -23,6 +23,4 @@ RUN docker-php-ext-enable xdebug
 #Enable Module Rewrite
 RUN a2enmod rewrite
 
-RUN mkdir /var/www/html/data_csv
-
 WORKDIR /var/www/html
