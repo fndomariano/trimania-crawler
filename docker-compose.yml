@@ -1,21 +1,25 @@
 version: '3'
 services:
-    web:
-        build: .
+    app:        
+        build: 
+            context: ./docker/app
+        container_name: trimania_app
         ports:
             - "80:80"
         volumes:
-            - .:/var/www/html
-            - ./docker/apache/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
-            - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+            - .:/var/www/html            
+            - ./docker/app/php.ini:/usr/local/etc/php/php.ini
         links:
             - db
-    db:
-        image: mysql
+    db:        
+        build: 
+            context: ./docker/mysql
+        container_name: trimania_db              
         ports:
             - "3306:3306"
         environment:
-            - MYSQL_DATABASE=trimania
-            - MYSQL_USER=root
+            - MYSQL_DATABASE=app
+            - MYSQL_USER=trimania
             - MYSQL_PASSWORD=root
+            - MYSQL_ROOT_USER=root
             - MYSQL_ROOT_PASSWORD=root

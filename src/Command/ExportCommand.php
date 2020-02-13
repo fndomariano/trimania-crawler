@@ -53,7 +53,7 @@ class ExportCommand extends Command
 			$data = $this->getData($dateBegin, $dateUntil, $type);
 	
 			if (empty($data)) {
-				throw new Exception('There is no data for this year');
+				throw new Exception('There is no data for this period');
 			}
 
 			$filename = $type . '-' . date('dmYHis');

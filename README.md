@@ -20,25 +20,10 @@ b) Configure environment file
 $ cp .env.default .env
 ```
 
-c) Create a directory called `data_csv`
-
-```bash
-$ mkdir data_csv
-```
-
-d) You can use docker (I recommend)
+c) Up the Docker containers
 
 ```bash
 $ docker-compose up -d
-```
-
-e) Import database
-
-I like using the command line for that. Of course, you can to import the way you prefer. I let some databases in the *data directory*. 
-
-
-```bash
-mysql --host=172.17.0.1 -uroot -proot trimania < data/trimania_05_05_2018.sql
 ```
 
 ## Verify the containers
@@ -46,9 +31,9 @@ mysql --host=172.17.0.1 -uroot -proot trimania < data/trimania_05_05_2018.sql
 ```bash
 $ docker ps
 
-CONTAINER ID        IMAGE
-3efe06f79d2e        trimania-crawler_web    ...     
-f1bbddbd9820        mysql                   ...
+CONTAINER ID     IMAGE                   ...   NAMES     
+3efe06f79d2e     trimania-crawler_app    ...   trimania_app  
+f1bbddbd9820     trimania-crawler_db     ...   trimania_db
 ```
 
 ## Examples

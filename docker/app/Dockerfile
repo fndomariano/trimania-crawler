@@ -2,7 +2,6 @@ FROM php:7.2-apache
 
 MAINTAINER Fernando Mariano <fernando.mar16@gmail.com>
 
-
 RUN apt-get update && apt-get install -y libmcrypt-dev libicu-dev libssl-dev git libpq-dev zlib1g-dev
 
 #Install VIM
@@ -23,5 +22,7 @@ RUN docker-php-ext-enable xdebug
 
 #Enable Module Rewrite
 RUN a2enmod rewrite
+
+RUN mkdir /var/www/html/data_csv
 
 WORKDIR /var/www/html
