@@ -1,4 +1,5 @@
 vendor/
 composer.lock
 .env
-data_csv/*.csv
+data_csv/*
+!data_csv/.gitkeep
