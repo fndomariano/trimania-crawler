@@ -14,7 +14,7 @@ a) Installing dependencies
 $ composer install
 ```
 
-b) Configure environment file
+b) Create a `.env` and configure environment variables
 
 ```bash
 $ cp .env.default .env
