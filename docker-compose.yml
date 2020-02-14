@@ -14,12 +14,13 @@ services:
     db:        
         build: 
             context: ./docker/mysql
-        container_name: trimania_db              
+        container_name: trimania_db
+        env_file:
+          - .env
         ports:
             - "3306:3306"
         environment:
-            - MYSQL_DATABASE=app
-            - MYSQL_USER=trimania
-            - MYSQL_PASSWORD=root
-            - MYSQL_ROOT_USER=root
-            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=${DB_NAME}
+            - MYSQL_USER=${DB_USER}
+            - MYSQL_PASSWORD=${DB_PASS}
+            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
