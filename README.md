@@ -8,16 +8,16 @@ I created this project to mount a dataset and to make studies in numbers and loc
 
 Currently, this project runs only in localhost. To configure in your computer follow the steps below. 
 
-a) Installing dependencies
-
-```bash
-$ composer install
-```
-
-b) Create a `.env` and configure environment variables
+a) Create a `.env` and configure environment variables
 
 ```bash
 $ cp .env.default .env
+```
+
+b) Installing dependencies
+
+```bash
+$ docker-compose exec app composer install
 ```
 
 c) Up the Docker containers
@@ -60,3 +60,10 @@ docker-compose exec web php console trimania:export --date_begin=2020-01-01 --da
 ```
 
 The files will be gererated in `data_csv` directory.
+
+
+### Tests
+
+```bash
+ docker-compose exec app ./vendor/bin/phpunit tests 
+```

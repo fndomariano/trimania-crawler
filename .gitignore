@@ -3,3 +3,5 @@ composer.lock
 .env
 data_csv/*
 !data_csv/.gitkeep
+.phpunit.result.cache
+tests/_reports
