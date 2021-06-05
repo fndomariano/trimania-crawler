@@ -5,7 +5,7 @@ services:
             context: ./docker/app
         container_name: trimania_app
         ports:
-            - "80:80"
+            - "8083:80"
         volumes:
             - .:/var/www/html            
             - ./docker/app/php.ini:/usr/local/etc/php/php.ini

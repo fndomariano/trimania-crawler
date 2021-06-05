@@ -14,16 +14,16 @@ a) Create a `.env` and configure environment variables
 $ cp .env.default .env
 ```
 
-b) Installing dependencies
-
-```bash
-$ docker-compose exec app composer install
-```
-
-c) Up the Docker containers
+b) Up the Docker containers
 
 ```bash
 $ docker-compose up -d
+```
+
+c) Installing dependencies
+
+```bash
+$ docker-compose exec app composer install
 ```
 
 ## Verify the containers
